@@ -1,0 +1,326 @@
+TODO:
+- Do rebuild_changes directly into zdt-dev-install? (currently manually copying over files
+  from Oracle_Home to zdt-dev-install).
+- GlassFish 5.0-b01
+  * Regression bug on console needs to be fixed
+    https://java.net/jira/browse/GLASSFISH-21443.  Ed sent mail to Prasad on this.
+  * Top level dir needs to be changed from glassfish4/ -> glassfish5/
+        * All test jobs, CTS, scripts, and anyone who tests glassfish needs to change to "glassfish5/". 
+  * Compile GlassFish 5 with JDK8 "-source 1.8 -target 1.8:
+        XX * JDK8 causes QL failures which need to be fixed.  Bug has been filed.
+        XX * JDK8 requires an upgrade to FindBugs version (2.0) which then uncovers 63 new high priority FindBugs errors that need to be fixed.
+        * Fix new FindBugs errors that were exposed with 3.0.3.
+        * JDK8 requires a new jmockit which then requires a new junit which then requires a bunch of unit tests to be fixed to use the new junit version.
+        XX * Could be more issues that pop up, but haven't got that far in the build yet.
+XX - GlassFish 4.1.2 (for NetBeans)
+- Create a more advanced multi-node Testlogic domain topology that can span clusters
+DONE - sc11136351 not in any pool but is running some git fetch/merge java.net commands?  What's up with that?
+
+
+Jill TODO:
+
+XX - Move windows node set up to git repo
+
+XX move linux nodes to zdt-windows.
+
+XX retry webservices build if fails.
+
+XX cts failing
+
+- In gf-hudson-infra/startup/start_slave.sh, kill leftover slave.jar processes.
+
+XX - finish reduce # p4 clients (task - finalize p4 client clean up)
+    XX * Check if always deleting workspace (in bootstrap) on windows
+    XX * Improve logging of bootstrap output into single log file (above workspace) instead of || true
+    XX * Check if post-build-new needs WLS_SRC?
+    XX * Cleanup the stale workspace wls- (make a quick script)
+    XX * notify Brian that we reduced the # of p4 clients (windows, multi-node, matrix jobs)
+
+XX -  P1 - (task) Make errors appear in job console output.
+        Update bootstrap to check for status and tail the job debug. Put some warning and markers.
+
+    > https://jira.oraclecorp.com/jira/browse/OWLS-37480
+    > in bootstrap-job.sh, put markers/message, tail N lines of jobdebug when exit code -ne 0
+    > Also, when a method fails, e.g. p4_sync, _binarysync, do the same as above for the specific logs.
+      i.e tail N lines of the log file into stderr
+
+  P1 - (task) Split wls-hudson-common into more scripts. (wls-clean-processes, wls-external-common)
+      - Start using base.sh, and the import method.
+      - Have each script import what it needs (transitive include)
+      - move init_archive_dir, add_to_readme, to external common.
+
+---
+
+  P2 - Work on a pre-bootstrap feature.
+       Rename bootstrap.sh to jobrunner.sh
+       Add the pre-bootstrap logic (i.e the real bootstrap) to bootstrap.sh
+
+       This is so that we can version the infra script themselves.
+       The version of the infra script is to be defined  (build-tools/common/infra-version.txt)  
+           -> we also to be able to override that version in a job, using a ENV variable.
+
+       The script will pull down the right version of the infra files, and invoke jobrunner.sh
+
+---
+
+  P2 -  Add a trap to bootstrap.sh to make sure the cleanup happens (i.e move logfile into jobdir)
+
+---
+
+  P2 - (task) Update bootstrap to clean processes before and after the job has run
+    > https://jira.oraclecorp.com/jira/browse/OWLS-37480)
+    XX use the new clean_job_processes
+    > the after cleanup should be more forceful.
+
+       - make a recursive kill that is not filtering ${PID} and ${PPID}
+         that finds children and calls itself with each children pid
+         when a children has no grand-children, stop the recursion, kill the children
+         e.g. from bootstrap-job.sh: recursive_kill ${PID}
+
+  P3 - Implement windows lsof using Handle and kill processes
+    XX > (task1) 1st step is to simply record the handle output
+        * accept licence for handle.exe on all windows nodes.
+          add to mks setup. 
+    > (task2) 2nd step is to parse the output to do a pre-emtive cleanup.
+      > test this by leaving some file opened out on the console / vnc.
+-------------
+
+  P3 - Work on moving job notifications into the bootstrap.
+      * Write required info (recipients, notification options) into a file at the top of job scripts.
+        i.e provide a convenient method to do that. (set_notification_info)
+
+      * To be combined with improved console output task so that we get more info in the failure emails.
+        i.e tail the last 200 lines of console output (including the tail of jobdebug when the job failed.)
+
+      * Add job url, unshelves, changelist# (if applicable) to mail notification.
+        can get the job-rundescription content.
+
+      * Add some comments to each notification to help the process.
+        Categorize failures and corresponding ownership.
+        Prompt people to reply to notifications for more questions.
+
+- P3 - add windows / *NIX specifics includes in wls-hudson-common.sh to handle prepend
+    > implement all remote node loops, and remove them from jobs
+      * start_agents / stop_agents
+      * loops within run_test
+
+- Test clean_job_processes which will kill the current job script (needed for windows)
+    to avoid error "Cannot move file because another process is using it".
+- rm hudson-common from post-build-symlink
+   (move some methods to external-common e.g., init_archive_dir(), add_to_readme() )
+- port wls-findbugs-println to sparc
+- ZDT needs PS3 jobs
+- need more windows nodes.
+- snapshot installed plugins on gf-hudson.
+- Need MQ 4.4 and MQ 4.5.2 patch builds.
+- Move more jobs to sparc
+- Fix hudson build failure mails to include job urls.
+- Add some retry logic to source_devenv (http errors, jdk download errors)
+- Remove the /net working messages in windows bashrc.
+- diag func tests failures
+- specify CL/unshelves in mail results text.
+- linux-setup.txt
+- increase default ulimit -u settings for 16gb systems.
+- CTS code cov
+- Metro jobs.  (use sparc)
+- Do ejb rq jobs for ps1.
+- delete java_home in auto_download on windows every time.
+- add option for -Dtestlogic.tests parameter.
+- devinstall often fails on windows.  investigate ways to make this more robust
+- source devenv.sh -dl often fails to install the full jdk on windows then causes the build to fail.
+     investigate ways to make this robust maybe 
+- remove MAIL_FROM in send_mail_text
+- fix ejb rq jobs to work with new framework.
+- Migrate Metro jobs.  Keep back up of jobs on prague server.
+- Replace hudson notifiction with the send mail in postbuild.
+- Do stop_agent before start_agent and use the methods in wls-hudson-common.
+- Reimaged from linux to windows 2012.
+  Create java_re user:
+  XX sc11136393 (zdt windows), sc11136361 (romain testing), sc11136215 (romain testing)
+  sc11136641 (mq windows)
+    start_agent, stop_agent
+- Investigate using one zdt-dev-install for ZDT multi node jobs.
+- Sort code cov reports in test results mail to match the test reports.
+- Move wls-findbugs-nightly-count job to linux pool.
+- Update the RQ hudson jobs to use run_remote_queue method (as a matrix job)
+
+DONE - retry p4 clean because of error:
+Date 2016/07/11 09:17:54:
+Operation: user-clean
+Partner exited unexpectedly.
+DONE - Retry on http fatal error from source devenv
+DONE - Add parameter to job template: -Dtestlogic.testcase.includes=
+DONE - Need channel tests running on solaris and windows for different muxers.
+DONE - (P1) avoid re-archiving already-archived domains (e.g.  successive run_tests in a job)
+  solution: mv domains dir to domains.archivedX (find a unique name) after each run_test
+DONE - Prefix the SSH commands for multi node jobs with the hostname. (take a look at wls-mt-admin-targeting-sandbox-partition-devtests-multi-unix)
+- Update WLS_SRC to the new mainline.
+DONE - Pass CL to devinstall instead of querying because manifest_version_<CL> could be different than
+     what's actually pulled over.   e.g.,  p4 sync @1000 could really be at 999
+     then devinstall fails.
+DONE - Move rest of ssh script to wls-hudson-common and source the common file.
+DONE - clean up hudson-tools directory with scripts that are no longer used.
+DONE - mv ssh scripts into common and source the file.
+DONE - Do PS1 for wls cluster matrix.
+DONE - create -ps1 jobs for all projects
+DONE - Don't use BINDIR in send_mail
+DONE - Generate code cov reports in ZDT jobs.
+DONE - Move all jobs to the new bootstrap and variables.
+DONE - rename all -122210 jobs to base name w/o extension. 
+DONE - set up wls cluster matrix job
+DONE - JMS jobs -> new hudson framework and 122210
+DONE - Add sc11136398 to linux pool.
+DONE - Send only one passed mail after unstable.
+DONE - Archive remote p4logs and other files in post build if Red (see jill_test1)
+    * Set env WLS_SRC and in job
+DONE - Take -x out of post build.
+DONE - Create a new email alias to send the notifications of gf-hudson (in order to stop using gfrelease_ww_grp)
+DONE - Udpate the wls-common-template to use the bootstrap script (!!!!)
+
+Romain TODO:
+
+     - Trade machine (scaaa343) with Byron 
+       Get 16+4 IPs from Joe.
+
+     - Version bootstrap and post-build with a infra-version.txt files.
+
+  P3 - setup site workspace, and host it at gf-hudson.us.oracle.com/
+       setup style, backups, and define a release script to perform each release
+
+  P2 - Update start_slave_master to upload windows bashrc everytime the node is started.
+       Update windows bashrc to only indicate when /net or /w is not working.
+
+  P2 - Make the disk cleanup a method that can be triggered by jobs directly.
+       Or, define a variable to control the threshold.
+       Or define a variable to control the automatic disk clean.
+
+  P2 - Update run_test for windows to generate junit from testlogic.log instead of TEST_LOG when there is not TLD.
+
+  P2 - Update make_junit_from_output to generate one test failure when it did not detect any test.
+       This is to make sure the job turns yellow and not red.
+
+  P1 - expose the devenv errors to console for start/stop agent methods.
+    so that there is no need to look at jobdebug.log.
+
+  P3 - auto cleanup of orphaned job data on gf-hudson.
+         WORK IN PROGRESS, complete gf-infra/hudson_master_jobs_cleanup.sh to check on _runmap.xml files.
+
+      Retry on p4 commands:
+% p4 describe -du 1775094
+Proxy unable to communicate with remote server:
+TCP connect to p4jrep:7999 failed.
+connect: 10.242.161.96:7999: Connection timed out
+
+% p4 client -i
+Date 2016/05/09 22:20:22:
+Operation: user-client
+TCP receive failed.
+read: socket: Connection reset by peer
+
+% p4 client -i
+Proxy unable to communicate with remote server:
+TCP connect to p4jrep:7999 failed.
+connect: 10.242.161.96:7999: Connection timed out
+
++ p4 client -i
+Date 2016/05/12 06:05:49:
+Operation: flush2
+TCP receive failed.
+read: socket: Connection reset by peer
+
+[sca00cvh] ++ p4 counter manifest_version_1777592
+[sca00cvh] Proxy unable to communicate with remote server:
+[sca00cvh] TCP connect to p4jrep:7999 failed.
+[sca00cvh] connect: 10.242.161.96:7999: Connection refused
+
+  P3 - create a hudson restart script that will take care of the bi-weekly restarts.
+
+  P3 - create a copy job script.
+       # fetch the config
+       curl -v -X GET http://gf-hudson.us.oracle.com/hudson/job/jill_test1/config.xml -o mylocalconfig.xml
+       # update the config
+       # create a new job with it
+       curl -v -u user:password -X POST http://gf-hudson.us.oracle.com/hudson/createItem?name=jill_test9 --data-binary "@mylocalconfig.xml" -H "Content-Type: text/xml"
+       # delete the job (TODO)
+
+  P3 - Clean results files in RESULT_DIR before running the test as this is not guaranted to be clean, even for the 1st run_test invocation.
+
+  P2 - Parallelize "pulling workspaces" on nodes
+    https://jira.oraclecorp.com/jira/browse/OWLS-37480
+    https://jira.oraclecorp.com/jira/browse/OWLS-37040  (parallelize wls ws )
+    https://jira.oraclecorp.com/jira/browse/OWLS-37043
+
+  - Help Jill with Metro jobs (plugin port)
+
+  P2 - Update groovy system script to set WLS_SRC programmatically.
+       Defined name convention to determine WLS_SRC (see notes in bootstrap script)
+       Maintain mapping of aliases in a property file under the git repo.
+
+  P3 - Update bootstrap script: 
+       If a script is not found, find a script to use and set ORIG_JOB_NAME.
+
+  P3 - Need a generic on demand job
+       To isolate on-demand jobs from continuous runs
+
+  P3 - Need documentation on how to set up Multi-Node testing.
+       Improve multi-node domain.xml
+       Sample multi-node Test
+       Requirements
+
+  P3 - Setup a wiki at gf-hudson.us.oracle/ using markdown.
+
+  P4 - Detect source of shelved changes
+       So that the error message would tell the user that the unshelve failed because it belongs to a different branch.
+       It could also be used to try unshelving it with the right -b option.
+       (The -b flag specifies a branch spec that the shelved files will be mapped through prior to being unshelved)
+
+  - Force login on gf-hudson
+  - Fix *env.log ids (e.g. 1--), dont maintain ID as a variable, rather compute it from the log itself (using grep and wc)
+    this would combine all the clean_processes (from bootstrap, job, post-build)
+  - Update testlogic result parsing to include test output in the JUnit descriptor.
+
+  DONE - P2 - Reply to Ed's java.net mail.
+  DONE - Save just the last 5 versions for use in the jobs.
+  DONE - Install docker on slcao492, slcao493 (24 core).
+  DONE - ssh command on docker nodes gives a "Connection closed" error and job fails.
+         Updated start_hudson to provide   -Dhudson.remoting.Launcher.pingTimeoutSec=12000 
+         See https://wiki.jenkins-ci.org/display/JENKINS/Remoting+issue, 
+             https://wiki.jenkins-ci.org/display/JENKINS/Ping+Thread
+
+  DONE - Define a release process and a way to tag the git repo and referenced released script
+    to maintain compatibility and facilitate making changes to the infrastructure.
+    > tag git repository
+    > maintain multiple clones for the in-use releases under /gf-hudson-tools
+      * e.g. /gf-hudson-tools/hudson-tools
+             /gf-hudson-tools/hudson-tools-1.0.0
+             /gf-hudson-tools/hudson-tools-1.0.1
+      * this will be implemented in the hudson-tools-sync job.
+    > bootstrap / init-job-data-dir copies all in-use releases version of the infra script
+    > and also predefines variable to access specific release (e.g. source ${wls_hudson_common_1_0_1})
+  DONE - put some fined grained logging for remote domain archiving to figure out the source of archived domains.
+         e.g. unit_multitenancy_domains_partitionlifecycleDomain-partition-1 and unit_multitenancy_domains_partitionlifecycleDomain-partition-1
+  DONE - archive testlogic.log in run_test because it's the only one to have test stacktraces.
+         use testrun name and archive under $ARCHIVE_DIR/test-logs.
+  DONE - Move to post-build-new.sh so Jill can delete that script.
+  DONE - P0 - make remote clean_processes inside run_test. (high priority)
+  DONE - add sc11136569 and sc11136584 for Chanda.
+  DONE - Figure out den* nodes.
+  DONE - blocking start_agent
+  DONE - Need disk clean up on windows.
+  DONE   https://jira.oraclecorp.com/jira/browse/OWLS-37041  (win disk clean up)  assigned for sprint 11
+  DONE - solaris support for wls ws and run tests, and port wls-hudson-common to solaris.
+         https://jira.oraclecorp.com/jira/browse/OWLS-37044  (solaris support)
+  DONE - Put the default printf message from wls-hudson-common (like WLS_SRC=) to /dev/stderr
+  DONE - Automate oui_mats on hudson
+  DONE - Update init-jobs-data-dir script to take care of adding all of the required files, and export variables
+  DONE - Update all MT jobs over to the new scripts and jobs template
+  DONE - Need ability to update p4 client so we can reuse the hudson workspaces. Important rename of 122210->12.2.1.1
+  DONE - Fix P4 clean
+--------------------
+
+Got Tag history for hudson-tools repo
+
+1_0_16 - [7/13/2016] ws symlink
+1_0_15 - [7/12/2016] p4 clean retry, ps_kill "WLS_SRC="
+1_0_14 - [7/11/2016] fix typo in disk clean up
+1_0_13 - [7/8/2016] fix ps_kill for case where  _SCRIPT_PID and _SCRIPT_PPID were emtpy
