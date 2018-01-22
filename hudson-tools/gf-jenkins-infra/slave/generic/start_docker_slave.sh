@@ -1,5 +1,5 @@
 #!/bin/bash
-DEFAULT_IMAGE_NAME=gf-jenkins/generic-slave:v1
+DEFAULT_IMAGE_NAME=ankurhub/generic-slave:latest
 
 if [ $# -gt 0 ] && [ ! -z "$1" ]; then
  IMAGE_NAME=$1
