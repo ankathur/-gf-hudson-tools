@@ -1,10 +1,10 @@
 #! /bin/bash
-#mkdir -p ${WORKSPACE}
-#if [ $? -eq 0 ]; then
-cd ${WORKSPACE}
-#else
- #  echo "Unable to create directory ${WORKSPACE}"
-#fi
+mkdir -p /scratch/BUILD_AREA
+if [ $? -eq 0 ]; then
+    cd /scratch/BUILD_AREA
+else
+   echo "Unable to create directory ${WORKSPACE}"
+fi
 true | which java
 java -version | true
 shopt -s nocasematch
