@@ -3,10 +3,10 @@ FROM oraclelinux:latest
 RUN mkdir /var/run/sshd
 RUN mkdir /scratch
 
-RUN useradd -d/scratch/java_re -c"Java Release Engineering" -s/bin/bash -u1337 -g10 java_re
-RUN sed s@'^java_re:.*'@'java_re:$5$TzT/gGrX$teXW3yKey7gRv0noPn7cx5kYwUya/sNXx4g3Vexzio3:16569::::::3755344'@g -i /etc/shadow
-RUN echo 'uadmin:x:0:0:Alternate Administrator:/root:/bin/bash' >> /etc/passwd
-RUN echo 'uadmin:v76NXnOK3QcHI:16681::::::' >> /etc/shadow
+#RUN useradd -d/scratch/java_re -c"Java Release Engineering" -s/bin/bash -u1337 -g10 java_re
+#RUN sed s@'^java_re:.*'@'java_re:$5$TzT/gGrX$teXW3yKey7gRv0noPn7cx5kYwUya/sNXx4g3Vexzio3:16569::::::3755344'@g -i /etc/shadow
+#RUN echo 'uadmin:x:0:0:Alternate Administrator:/root:/bin/bash' >> /etc/passwd
+#RUN echo 'uadmin:v76NXnOK3QcHI:16681::::::' >> /etc/shadow
 
 RUN mkdir /scratch/gf-code
 RUN mkdir /scratch/mvn
@@ -15,13 +15,13 @@ RUN mkdir /scratch/BUILD_AREA
 RUN mkdir /scratch/gf-hudson-tools/
 RUN mkdir /scratch/workspace
 RUN mkdir /scratch/free-folder
-RUN chown -R java_re:wheel /scratch/BUILD_AREA
-RUN chown -R java_re:wheel /scratch/jdk
-RUN chown -R java_re:wheel /scratch/mvn
-RUN chown -R java_re:wheel /scratch/gf-hudson-tools
-RUN chown -R java_re:wheel /scratch/gf-code
-RUN chown -R java_re:wheel /scratch/workspace
-RUN chown -R java_re:wheel /scratch/free-folder
+#RUN chown -R java_re:wheel /scratch/BUILD_AREA
+#RUN chown -R java_re:wheel /scratch/jdk
+#RUN chown -R java_re:wheel /scratch/mvn
+#RUN chown -R java_re:wheel /scratch/gf-hudson-tools
+#RUN chown -R java_re:wheel /scratch/gf-code
+#RUN chown -R java_re:wheel /scratch/workspace
+#RUN chown -R java_re:wheel /scratch/free-folder
 
 
 ENV TINI_VERSION 0.14.0
@@ -44,8 +44,8 @@ ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
 # increase max nproc ulimit for 8GB memory
-RUN echo 'java_re soft nproc 8192' >> /etc/security/limits.conf
-RUN echo 'java_re hard nproc 8192' >> /etc/security/limits.conf
+RUN echo 'root soft nproc 8192' >> /etc/security/limits.conf
+RUN echo 'root hard nproc 8192' >> /etc/security/limits.conf
 
 
 # TODO add epel repo
@@ -69,8 +69,8 @@ RUN unlink /etc/localtime
 RUN ln -s /usr/share/zoneinfo/US/Pacific /etc/localtime
 
 #installing jdk 8 and mvn
-RUN wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jdk-8u151-linux-x64.tar.gz
-RUN tar -xvzf jdk-8u151-linux-x64.tar.gz -C /scratch/jdk
+RUN wget --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.tar.gz
+RUN tar -xvzf jdk-8u161-linux-x64.tar.gz -C /scratch/jdk
 RUN wget http://redrockdigimark.com/apachemirror/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
 RUN tar -xvzf apache-maven-3.5.2-bin.tar.gz -C /scratch/mvn
 
