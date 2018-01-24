@@ -463,6 +463,8 @@ dev_external_build(){
 
 merge_junits(){
   TEST_ID="build-unit-tests"
+  whoami
+  ls -l ${CONTAINER_WORKSPACE}
   rm -rf ${CONTAINER_WORKSPACE}/test-results
   mkdir -p ${CONTAINER_WORKSPACE}/test-results/$TEST_ID/results/junitreports
   JUD="${CONTAINER_WORKSPACE}/test-results/${TEST_ID}/results/junitreports/test_results_junit.xml"
