@@ -564,7 +564,7 @@ create_version_info_for_binary(){
 archive_bundles(){
     printf "\n%s \n\n" "===== ARCHIVE BUNDLES ====="
     rm -rf ${CONTAINER_WORKSPACE}/bundles ; mkdir ${CONTAINER_WORKSPACE}/bundles
-    cp ${CONTAINER_WORKSPACE}/version-info.txt $CONTAINER_WORKSPACE/bundles
+    #cp ${CONTAINER_WORKSPACE}/version-info.txt $CONTAINER_WORKSPACE/bundles
     cp ${CONTAINER_WORKSPACE}/$GF_ROOT/appserver/distributions/glassfish/target/*.zip ${CONTAINER_WORKSPACE}/bundles
     cp ${CONTAINER_WORKSPACE}/$GF_ROOT/appserver/distributions/web/target/*.zip ${CONTAINER_WORKSPACE}/bundles
     cp ${CONTAINER_WORKSPACE}/$GF_ROOT/nucleus/distributions/nucleus/target/*.zip ${CONTAINER_WORKSPACE}/bundles
@@ -596,7 +596,7 @@ zip_tests_workspace(){
 	appserver/admingui/devtests/ \
 	appserver/admingui/pom.xml \
         -x *.git/* > /dev/null
-    cp -p  ${CONTAINER_WORKSPACE}/$GF_ROOT/appserver/tests/gftest.sh ${CONTAINER_WORKSPACE}/bundles
+    cp -p  $GF_ROOT/appserver/tests/gftest.sh ${CONTAINER_WORKSPACE}/bundles
 }
 
 zip_gf_source(){
