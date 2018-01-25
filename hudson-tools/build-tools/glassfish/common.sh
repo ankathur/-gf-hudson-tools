@@ -446,7 +446,7 @@ print_env_info(){
 dev_build(){
     printf "\n%s \n\n" "===== DO THE BUILD! ====="
     mvn ${MAVEN_ARGS} -f pom.xml clean install \
-        -Dmaven.test.failure.ignore=true
+        -Dmaven.test.failure.ignore=true -Dmaven.repo.local=${CONTAINER_WORKSPACE}/repository
 }
 
 dev_external_build(){
