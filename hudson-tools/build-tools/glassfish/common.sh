@@ -87,7 +87,7 @@ build_re_finalize(){
     archive_bundles
     zip_tests_workspace
     zip_tests_maven_repo
-    zip_gf_source
+   # zip_gf_source
 }
 
 build_re_dev(){
