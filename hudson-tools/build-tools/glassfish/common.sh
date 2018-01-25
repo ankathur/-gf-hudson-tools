@@ -565,9 +565,9 @@ archive_bundles(){
     printf "\n%s \n\n" "===== ARCHIVE BUNDLES ====="
     rm -rf ${CONTAINER_WORKSPACE}/bundles ; mkdir ${CONTAINER_WORKSPACE}/bundles
     #cp ${CONTAINER_WORKSPACE}/version-info.txt $CONTAINER_WORKSPACE/bundles
-    cp ${CONTAINER_WORKSPACE}/$GF_ROOT/appserver/distributions/glassfish/target/*.zip ${CONTAINER_WORKSPACE}/bundles
-    cp ${CONTAINER_WORKSPACE}/$GF_ROOT/appserver/distributions/web/target/*.zip ${CONTAINER_WORKSPACE}/bundles
-    cp ${CONTAINER_WORKSPACE}/$GF_ROOT/nucleus/distributions/nucleus/target/*.zip ${CONTAINER_WORKSPACE}/bundles
+    cp $GF_ROOT/appserver/distributions/glassfish/target/*.zip ${CONTAINER_WORKSPACE}/bundles
+    cp $GF_ROOT/appserver/distributions/web/target/*.zip ${CONTAINER_WORKSPACE}/bundles
+    cp $GF_ROOT/nucleus/distributions/nucleus/target/*.zip ${CONTAINER_WORKSPACE}/bundles
 }
 
 archive_binaries(){
