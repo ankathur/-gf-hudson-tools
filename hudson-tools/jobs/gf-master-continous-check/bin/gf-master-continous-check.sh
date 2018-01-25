@@ -39,7 +39,7 @@ else
 fi
 
 /bin/bash -ex /scratch/gf-hudson-tools/hudson-tools/build-tools/glassfish/gfbuild.sh build_re_dev 2>&1
-cp /scratch/gf-hudson-tools/hudson-tools/build-tools/glassfish/retry_config $WORKSPACE/retry_config
+cp /scratch/gf-hudson-tools/hudson-tools/build-tools/glassfish/retry_config $CONTAINER_WORKSPACE/retry_config
 if [ -z "${JENKINS_HOME}" ] && [ -z "${JENKINS_URL}" ]; then
  LINUX_LARGE_POOL="POOL-1-LINUX-LARGE"
  SOLARIS_POOL="solaris-sparc"
