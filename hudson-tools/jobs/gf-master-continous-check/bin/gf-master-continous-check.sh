@@ -45,11 +45,11 @@ if [ -z "${JENKINS_HOME}" ] && [ -z "${JENKINS_URL}" ]; then
  SOLARIS_POOL="solaris-sparc"
  test_ids=`/bin/bash -ex .${GF_ROOT}/appserver/tests/gftest.sh list_test_ids ${1} | sed s/security_all/security_all\=$SOLARIS_POOL/g |sed s/findbugs_all/findbugs_all\=$LINUX_LARGE_POOL/g | sed s/findbugs_low_priority_all/findbugs_low_priority_all\=$LINUX_LARGE_POOL/g`
 else
-  test_ids=`ql_gf_full_profile_all`
+  #test_ids=`ql_gf_full_profile_all`
 fi  
 
 
 
 
-bash -ex /scratch/gf-hudson-tools/hudson-tools/build-tools/trigger_and_block.sh ${test_ids}
+bash -ex /scratch/gf-hudson-tools/hudson-tools/build-tools/trigger_and_block.sh ql_gf_full_profile_all
 bash -ex /scratch/gf-hudson-tools/hudson-tools/build-tools/glassfish/checkJobStatus.sh
