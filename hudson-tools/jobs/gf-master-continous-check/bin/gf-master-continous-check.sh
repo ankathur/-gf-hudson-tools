@@ -40,13 +40,13 @@ fi
 
 /bin/bash -ex /scratch/gf-hudson-tools/hudson-tools/build-tools/glassfish/gfbuild.sh build_re_dev 2>&1
 cp /scratch/gf-hudson-tools/hudson-tools/build-tools/glassfish/retry_config $CONTAINER_WORKSPACE/retry_config
-if [ -z "${JENKINS_HOME}" ] && [ -z "${JENKINS_URL}" ]; then
- LINUX_LARGE_POOL="POOL-1-LINUX-LARGE"
- SOLARIS_POOL="solaris-sparc"
- test_ids=`/bin/bash -ex .${GF_ROOT}/appserver/tests/gftest.sh list_test_ids ${1} | sed s/security_all/security_all\=$SOLARIS_POOL/g |sed s/findbugs_all/findbugs_all\=$LINUX_LARGE_POOL/g | sed s/findbugs_low_priority_all/findbugs_low_priority_all\=$LINUX_LARGE_POOL/g`
-else
+#if [ -z "${JENKINS_HOME}" ] && [ -z "${JENKINS_URL}" ]; then
+# LINUX_LARGE_POOL="POOL-1-LINUX-LARGE"
+# SOLARIS_POOL="solaris-sparc"
+# test_ids=`/bin/bash -ex .${GF_ROOT}/appserver/tests/gftest.sh list_test_ids ${1} | sed s/security_all/security_all\=$SOLARIS_POOL/g |sed s/findbugs_all/findbugs_all\=$LINUX_LARGE_POOL/g | sed s/findbugs_low_priority_all/findbugs_low_priority_all\=$LINUX_LARGE_POOL/g`
+#else
   #test_ids=`ql_gf_full_profile_all`
-fi  
+#fi  
 
 
 
