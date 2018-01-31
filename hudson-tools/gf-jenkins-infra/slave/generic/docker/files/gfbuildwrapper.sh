@@ -5,6 +5,9 @@ if [ $? -eq 0 ]; then
 else
    echo "Unable to create directory ${WORKSPACE}"
 fi
+ls -l /scratch/
+ls -l /scratch/gf-hudson-tools/
+ls -l /scratch/gf-hudson-tools/hudson_tools/jobs/gf-generic-test-job/bin/
 true | which java
 java -version | true
 shopt -s nocasematch
