@@ -1,7 +1,8 @@
 #!/bin/bash
 env
 export PATH=/gf-hudson-tools/bin:${PATH}
-ls -l ~/.ssh
+ls -l /etc/ssh/
+ls -l /etc/ssh/ssh_host_rsa_key
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 chmod og-wx ~/.ssh/authorized_keys 
 
