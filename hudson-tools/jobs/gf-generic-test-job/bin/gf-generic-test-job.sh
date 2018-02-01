@@ -1,6 +1,9 @@
 #!/bin/bash
 env
 export PATH=/gf-hudson-tools/bin:${PATH}
+ls -l ~/.ssh
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+chmod og-wx ~/.ssh/authorized_keys 
 
 #rm -rf ${WORKSPACE}/* || true
 jps -mv
