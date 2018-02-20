@@ -7,6 +7,6 @@ ls ~/.ssh
 jps -mv
 ls -l ${PARENT_WS_PATH_CONTAINER}/
 ls -l ${PARENT_WS_PATH_CONTAINER}/bundles/
-scp -i "/root/.ssh/ssh_host_rsa_key" -v -o "StrictHostKeyChecking no" root@${PARENT_NODE}:${PARENT_WS_PATH_CONTAINER}/bundles/gftest.sh .
+chmod 777 ${PARENT_WS_PATH_CONTAINER}/bundles/gftest.sh
 scp -i "/root/.ssh/ssh_host_rsa_key" -v -o "StrictHostKeyChecking no" genie.dash@${PARENT_NODE}:${PARENT_WS_PATH_CONTAINER}/bundles/gftest.sh .
 bash -ex gftest.sh run_test ${TEST_ID}
