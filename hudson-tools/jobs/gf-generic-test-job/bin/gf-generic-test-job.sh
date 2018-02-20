@@ -2,7 +2,7 @@
 env
 export PATH=/gf-hudson-tools/bin:${PATH}
 ls ~/.ssh
-cat ~/.ssh/ssh_host_rsa_key.pub >> /scratch/host_ssh/authorized_keys
+#cat ~/.ssh/ssh_host_rsa_key.pub >> /scratch/host_ssh/authorized_keys
 #rm -rf ${WORKSPACE}/* || true
 jps -mv
 ls -l ${PARENT_WS_PATH_CONTAINER}/
