@@ -14,6 +14,7 @@ RUN mkdir /scratch/jdk
 RUN mkdir /scratch/BUILD_AREA
 RUN mkdir /scratch/gf-hudson-tools/
 RUN mkdir /scratch/workspace
+RUN mkdir /scratch/host_ssh
 RUN mkdir /scratch/free-folder
 #RUN chown -R java_re:wheel /scratch/BUILD_AREA
 #RUN chown -R java_re:wheel /scratch/jdk
@@ -38,7 +39,7 @@ RUN echo '/dev/BUILD_AREA /scratch/BUILD_AREA ext4    barrier=0       1 2' >> /e
 
 # SSH login fix. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
+RUN ssh-keygen -f /root/.ssh/ssh_host_rsa_key -N '' -t rsa
 
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
