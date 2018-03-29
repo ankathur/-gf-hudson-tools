@@ -40,16 +40,16 @@ else
   #Customize Docker name
   dock_name=${JOB_NAME}-${BUILD_NUMBER}
   if [[  "${dock_name}" =~ ^[a-zA-Z0-9][a-zA-Z0-9_.-]+$ ]]; then
-    if [ ! "$(docker ps -q -f name=${dock_name})" ]; then
-      if [ "$(docker ps -aq -f status=exited -f name=${dock_name})" ]; then
+    if [ ! "$(sudo docker ps -q -f name=${dock_name})" ]; then
+      if [ "$(sudo docker ps -aq -f status=exited -f name=${dock_name})" ]; then
         # cleanup
-        docker rm ${dock_name}
+        sudo docker rm ${dock_name}
       fi
     NAME_ARG="--name ${dock_name}"
     fi
   fi
 
-  docker run ${NAME_ARG} --privileged=true ${NAME_ARG} ${GLOBAL_ENVS} ${JENKINS_VARS} ${ENV_PARAMS} -e PATH="$PATH:${JAVA_HOME}/bin:/scratch/mvn/apache-maven-3.5.2/bin"  -e MAVEN_OPTS="${MAVEN_OPTS}"  -e TEST_IDS="${TEST_IDS}" -e EXECUTE_SCRIPT="${EXECUTE_SCRIPT}" -v ${WORKSPACE}:/scratch/BUILD_AREA -v ~/gf-hudson-tools/:/scratch/gf-hudson-tools -v /tmp/auto_${BUILD_NUMBER}.log:/var/log/automount.log -h ${HOST} "${dn_opt}" ${IMAGE_NAME}
+  sudo docker run ${NAME_ARG} --privileged=true ${NAME_ARG} ${GLOBAL_ENVS} ${JENKINS_VARS} ${ENV_PARAMS} -e PATH="$PATH:${JAVA_HOME}/bin:/scratch/mvn/apache-maven-3.5.2/bin"  -e MAVEN_OPTS="${MAVEN_OPTS}"  -e TEST_IDS="${TEST_IDS}" -e EXECUTE_SCRIPT="${EXECUTE_SCRIPT}" -v ${WORKSPACE}:/scratch/BUILD_AREA -v ~/gf-hudson-tools/:/scratch/gf-hudson-tools -v /tmp/auto_${BUILD_NUMBER}.log:/var/log/automount.log -h ${HOST} "${dn_opt}" ${IMAGE_NAME}
   result=$?
   
   set -e
@@ -67,5 +67,5 @@ fi
 
 set +e
 #Clean up the container
-docker ps --filter "status=exited" | grep -v 'CONTAINER' | awk '{print $1}'  | xargs --no-run-if-empty docker rm
+sudo docker ps --filter "status=exited" | grep -v 'CONTAINER' | awk '{print $1}'  | xargs --no-run-if-empty sudo docker rm
 exit ${result}

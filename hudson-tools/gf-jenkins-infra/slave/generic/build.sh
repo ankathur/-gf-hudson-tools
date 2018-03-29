@@ -32,10 +32,10 @@ if  [ ! -z "${DOCKER_ARG}" ]; then
  ARG="${DOCKER_ARG}"
  echo "Build arguments: ${ARG} "
 fi
-docker build ${ARG} -t ${IMAGE_NAME} ${DOCK_DIR} 
-docker images | grep ${IMAGE_SHORT_NAME} | grep ${VERSION}
+sudo docker build ${ARG} -t ${IMAGE_NAME} ${DOCK_DIR} 
+sudo docker images | grep ${IMAGE_SHORT_NAME} | grep ${VERSION}
 
-docker save -o ${IMAGE_TAR} ${IMAGE_NAME}
+sudo docker save -o ${IMAGE_TAR} ${IMAGE_NAME}
 
 set +e
 commit=`git log -n 1`
