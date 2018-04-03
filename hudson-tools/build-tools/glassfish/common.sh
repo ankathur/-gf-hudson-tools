@@ -88,6 +88,7 @@ build_re_finalize(){
     zip_tests_workspace
     zip_tests_maven_repo
    # zip_gf_source
+    copy_bundle_to_nfs
 }
 
 build_re_dev(){
@@ -658,6 +659,12 @@ align_column(){
     y=$((max-stringlength))
     while [ $y -gt 0 ] ; do string="${string}${char}" ; y=$((y-1)) ; done
     echo "${string}"
+}
+copy_bundle_to_nfs(){
+#need to update in order to support multiple bundles.
+mkdir -p ${NFS_PAH}/bundles
+cp /scratch/BUILD_AREA/bundles/* ${NFS_PATH}/bundles 
+
 }
 
 create_git_tag(){
