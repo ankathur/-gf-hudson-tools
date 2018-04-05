@@ -312,6 +312,8 @@ find_test_job(){
 # Args: NODENAME WORKSPACE_PATH TEST_ID
 #
 trigger_test_job(){
+  CRUMB=$(curl -s -X GET ${CRUMB_ISSUER_URL} | grep -Po '"crumb":.*?[^\\]"' | grep -Po '":.*?[^\\]"'| perl -ne 'print "\"Jenkins-Crumb $_"')
+  CRUMB=$(echo ${CRUMB/ \":\"/:})
   local params
   if [[ ${#} -eq 3 ]]; then
     params="PARENT_ID=${JOB_NAME}_${BUILD_NUMBER}&PARENT_NODE=${1}&PARENT_WS_PATH=${2}&TEST_ID=${3}"
@@ -320,7 +322,7 @@ trigger_test_job(){
     params="PARENT_ID=${JOB_NAME}_${BUILD_NUMBER}&PARENT_NODE=${1}&PARENT_WS_PATH=${2}&TEST_ID=${3}&LABEL=${4}"
     log_msg "[INFO] trigger_test_job(): triggering ${3} on label ${4}"
   fi
-  curl -X POST \
+  curl -H ${CRUMB} -X POST \
     "${TEST_JOB_URL}/buildWithParameters?${params}&delay=0sec" 2> /dev/null
 }
 
