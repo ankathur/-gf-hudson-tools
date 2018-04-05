@@ -314,6 +314,8 @@ find_test_job(){
 trigger_test_job(){
   CRUMB=$(curl -s -X GET ${CRUMB_ISSUER_URL} | grep -Po '"crumb":.*?[^\\]"' | grep -Po '":.*?[^\\]"'| perl -ne 'print "\"Jenkins-Crumb $_"')
   CRUMB=$(echo ${CRUMB/ \":\"/:})
+  CRUMB=$(echo ${CRUMB/\"/})
+  CRUMB=$(echo ${CRUMB/\"/})
   local params
   if [[ ${#} -eq 3 ]]; then
     params="PARENT_ID=${JOB_NAME}_${BUILD_NUMBER}&PARENT_NODE=${1}&PARENT_WS_PATH=${2}&TEST_ID=${3}"
